@@ -79,7 +79,7 @@ def new_card():
             count_down(counter)
 
 
-# --------------------------------- FLIP ---------------------------------
+# --------------------------------- COUNTDOWN ---------------------------------
 def count_down(counter_time):
     global timer
     canvas.itemconfig(card_counter, text=f"({counter_time})")
