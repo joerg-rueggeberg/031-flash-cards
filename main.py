@@ -100,8 +100,7 @@ def known():
         window.after_cancel(timer)
     new_card()
 
-# --------------------------------- SAVE ---------------------------------
-# TODO: optional save and resume option
+    # TODO: Create new .csv as save state for restarting the program
 
 
 # --------------------------------- END ---------------------------------
