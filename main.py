@@ -105,7 +105,7 @@ def unknown():
     new_card()
 
 
-# --------------------------------- BU UNKNOWN ---------------------------------
+# --------------------------------- BU KNOWN ---------------------------------
 def known():
     global card_num, db_index
     db.remove(db_index)
