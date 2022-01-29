@@ -19,18 +19,32 @@ word_back = ""
 word_freq = ""
 
 # --------------------------------- GET DATA ---------------------------------
-word_data = pandas.read_csv("data.csv")
-db = {index: [row.english, row.german, row.freq] for (index, row) in word_data.iterrows()}
-card_num = len(db)
-card_num_start = len(db)
-db_index = None
+try:
+    word_data = pandas.read_csv("data_user.csv")
+    new_game = messagebox.askquestion("Datenbank auswählen", 'Möchtest du deinen alten Spielstand fortsetzen?\n\n'
+                                                             f'Ja = fortsetzen\n'
+                                                             f'Nein = von vorn beginnen')
+
+except FileNotFoundError:
+    word_data = pandas.read_csv("data.csv")
+    new_game = "no"
+finally:
+    if new_game == "yes":
+        word_data = pandas.read_csv("data_user.csv")
+    else:
+        word_data = pandas.read_csv("data.csv")
+
+    db = word_data.to_dict(orient="records")
+    card_num = len(db)
+    card_num_start = len(db)
+    db_index = None
 
 
 # --------------------------------- START ---------------------------------
 def start():
     global modus
     start_option = messagebox.askquestion("Lernmodus auswählen", "Zeit Modus:\n"
-                                                                 "Karte wird nach 5. Sekunden "
+                                                                 "Karte wird nach 8. Sekunden "
                                                                  "automatisch aufgedeckt.\n\n"
                                                                  "Manuteller Modus:\n"
                                                                  "Karten werden manuell aufgedeckt.\n\n"
@@ -47,14 +61,14 @@ def start():
 def new_card():
     global word_front, word_back, word_freq, db_index
     try:
-        db_index = choice(list(db))
+        db_index = choice(db)
     except IndexError:
         label_card_num.config(text=f"Karten: 0/{card_num_start}")
         end()
     else:
-        word_front = db[db_index][0]
-        word_back = db[db_index][1]
-        word_freq = db[db_index][2]
+        word_front = db_index[LANG_01]
+        word_back = db_index[LANG_02]
+        word_freq = db_index["freq"]
 
         label_card_num.config(text=f"Karten: {card_num}/{card_num_start}")
         canvas.itemconfig(card_title, text=LANG_01, font=FONT_LANG)
@@ -93,13 +107,15 @@ def unknown():
 
 # --------------------------------- BU UNKNOWN ---------------------------------
 def known():
-    global card_num, db
-    del db[db_index]
+    global card_num, db_index
+    db.remove(db_index)
     card_num = len(db)
     if modus == 0:
         window.after_cancel(timer)
 
     # TODO: Create new .csv as save state for restarting the program
+    new_csv = pandas.DataFrame(db)
+    new_csv.to_csv("data_user.csv")
 
     new_card()
 
