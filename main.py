@@ -115,7 +115,7 @@ def known():
 
     # TODO: Create new .csv as save state for restarting the program
     new_csv = pandas.DataFrame(db)
-    new_csv.to_csv("data_user.csv")
+    new_csv.to_csv("data_user.csv", index=False)
 
     new_card()
 
