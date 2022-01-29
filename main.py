@@ -98,9 +98,10 @@ def known():
     card_num = len(db)
     if modus == 0:
         window.after_cancel(timer)
-    new_card()
 
     # TODO: Create new .csv as save state for restarting the program
+
+    new_card()
 
 
 # --------------------------------- END ---------------------------------
